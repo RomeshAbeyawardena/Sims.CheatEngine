@@ -33,8 +33,12 @@ namespace Sims.CheatEngine.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveGame([FromBody] SaveGameViewModel saveGameViewModel)
         {
-            return Ok(await _gameService.SaveGame(
-                Map<SaveGameViewModel, Game>(saveGameViewModel)));
+            var savedGame = await _gameService.SaveGame(
+                Map<SaveGameViewModel, Game>(saveGameViewModel));
+
+            await _webCacheProvider.ClearCache(nameof(_webCacheProvider.Games));
+
+            return Ok(savedGame);
         }
 
         public GameController(IWebCacheProvider webCacheProvider,

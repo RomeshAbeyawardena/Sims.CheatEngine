@@ -8,5 +8,6 @@ namespace Sims.CheatEngine.Contracts.Providers
     {
         Task<IEnumerable<Game>> Games { get; }
         Task<IEnumerable<Cheat>> GetCheats(int gameId);
+        Task ClearCache(string key);
     }
 }

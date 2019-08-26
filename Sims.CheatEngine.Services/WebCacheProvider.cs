@@ -25,6 +25,11 @@ namespace Sims.CheatEngine.Services
                 _dataPoolFactory.GetValueAsync(gameId, async(a) => await _cheatService.GetCheats(a));
         }
 
+        public async Task ClearCache(string key)
+        {
+            await _cacheProvider.ClearByKey(key);
+        }
+
         public WebCacheProvider(IDataPoolFactory dataPoolFactory, ICacheProvider cacheProvider, 
             IGameService gameService, ICheatService cheatService)
         {
