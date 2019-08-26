@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Sims.CheatEngine.Contracts\Sims.CheatEngine.Contracts.csproj" />
+    <ProjectReference Include="..\Sims.CheatEngine.Data\Sims.CheatEngine.Data.csproj" />
+	  <ProjectReference Include="..\Sims.CheatEngine.Services\Sims.CheatEngine.Services.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="WebToolkit.Contracts" Version="2.4.2" />
+	</ItemGroup>
+</Project>

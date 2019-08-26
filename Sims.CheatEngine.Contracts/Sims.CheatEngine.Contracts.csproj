@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Sims.CheatEngine.Domains\Sims.CheatEngine.Domains.csproj" />
+	</ItemGroup>
+</Project>
