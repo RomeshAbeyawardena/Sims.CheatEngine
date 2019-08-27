@@ -23,11 +23,12 @@ namespace Sims.CheatEngine.Api.Controllers
         public async Task<ActionResult> GetCheats([FromQuery] GetCheatsRequestViewModel requestViewModel)
         {
             var cheats = await _webCacheProvider.GetCheats(requestViewModel.GameId);
-
-            return Ok(string.IsNullOrEmpty(requestViewModel.Query) 
+            var query = requestViewModel.Query?.ToLower();
+            return Ok(string.IsNullOrEmpty(query) 
                 ? cheats 
-                : cheats.Where(cheat => cheat.Name.Contains(requestViewModel.Query) 
-                                        || cheat.Code.Contains(requestViewModel.Query)));
+                : cheats.Where(cheat => cheat.Name.ToLower().Contains(query) 
+                                        || cheat.Description.ToLower().Contains(query) 
+                                        || cheat.Code.ToLower().Contains(query)));
         }
 
         [HttpPost]

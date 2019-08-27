@@ -20,6 +20,9 @@ namespace Sims.CheatEngine.Services
 
         public async Task<Cheat> SaveCheat(Cheat cheat, bool saveChanges = true)
         {
+            if (cheat.Id > 0)
+                cheat = _cheatRepository.Attach(cheat);
+
             return await _cheatRepository.SaveChangesAsync(cheat, saveChanges);
         }
 

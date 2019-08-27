@@ -19,13 +19,13 @@ namespace Sims.CheatEngine.App
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.titleBarControl1 = new Sims.CheatEngine.App.UserControls.TitleBarControl();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeaderId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.titleBarControl1 = new Sims.CheatEngine.App.UserControls.TitleBarControl();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -103,6 +103,20 @@ namespace Sims.CheatEngine.App
             this.toolStripButton1.Text = "Exit";
             this.toolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             // 
+            // titleBarControl1
+            // 
+            this.titleBarControl1.BackColor = System.Drawing.Color.SteelBlue;
+            this.tableLayoutPanel1.SetColumnSpan(this.titleBarControl1, 2);
+            this.titleBarControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.titleBarControl1.Font = new System.Drawing.Font("Segoe UI", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleBarControl1.ForeColor = System.Drawing.Color.LightSkyBlue;
+            this.titleBarControl1.Location = new System.Drawing.Point(3, 3);
+            this.titleBarControl1.Name = "titleBarControl1";
+            this.titleBarControl1.Size = new System.Drawing.Size(1018, 26);
+            this.titleBarControl1.TabIndex = 3;
+            this.titleBarControl1.Text = "Sims 4 Cheats";
+            this.titleBarControl1.TextForeColour = System.Drawing.Color.White;
+            // 
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -110,6 +124,7 @@ namespace Sims.CheatEngine.App
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(478, 37);
             this.textBox1.TabIndex = 4;
+            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // listView1
             // 
@@ -138,6 +153,11 @@ namespace Sims.CheatEngine.App
             this.columnHeaderName.Text = "Name";
             this.columnHeaderName.Width = 120;
             // 
+            // columnHeaderDescription
+            // 
+            this.columnHeaderDescription.Text = "Description";
+            this.columnHeaderDescription.Width = 180;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
@@ -151,25 +171,6 @@ namespace Sims.CheatEngine.App
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(534, 702);
             this.tableLayoutPanel2.TabIndex = 6;
-            // 
-            // columnHeaderDescription
-            // 
-            this.columnHeaderDescription.Text = "Description";
-            this.columnHeaderDescription.Width = 180;
-            // 
-            // titleBarControl1
-            // 
-            this.titleBarControl1.BackColor = System.Drawing.Color.SteelBlue;
-            this.tableLayoutPanel1.SetColumnSpan(this.titleBarControl1, 2);
-            this.titleBarControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.titleBarControl1.Font = new System.Drawing.Font("Segoe UI", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleBarControl1.ForeColor = System.Drawing.Color.LightSkyBlue;
-            this.titleBarControl1.Location = new System.Drawing.Point(3, 3);
-            this.titleBarControl1.Name = "titleBarControl1";
-            this.titleBarControl1.Size = new System.Drawing.Size(1018, 26);
-            this.titleBarControl1.TabIndex = 3;
-            this.titleBarControl1.Text = "Sims 4 Cheats";
-            this.titleBarControl1.TextForeColour = System.Drawing.Color.White;
             // 
             // MainForm
             // 

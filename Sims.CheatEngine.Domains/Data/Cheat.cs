@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using WebToolkit.Contracts;
 
 namespace Sims.CheatEngine.Domains.Data
 {
     public class Cheat : ICreated, IModified
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

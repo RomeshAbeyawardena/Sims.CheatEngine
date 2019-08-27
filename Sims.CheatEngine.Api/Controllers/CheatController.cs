@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Sims.CheatEngine.Contracts.Services;
 using Sims.CheatEngine.Domains.Data;
 using Sims.CheatEngine.Domains.ViewModels;
@@ -23,13 +24,24 @@ namespace Sims.CheatEngine.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveCheat([FromBody] SaveCheatViewModel saveCheatViewModel)
         {
-            var cheat = Map<SaveCheatViewModel, Cheat>(saveCheatViewModel);
-            var savedCheat = await _cheatService.SaveCheat(cheat);
+            var mappedCheat = Map<SaveCheatViewModel, Cheat>(saveCheatViewModel);
+            var savedCheat = await _cheatService.SaveCheat(mappedCheat);
 
-            var value = _dataPoolFactory.Retrieve(saveCheatViewModel.GameId);
+            var value = _dataPoolFactory.Retrieve(saveCheatViewModel.GameId)?.ToArray();
             if (value != null)
-                _dataPoolFactory.Add(savedCheat.GameId, value.Append(savedCheat));
-            
+            {
+                if(saveCheatViewModel.Id == 0)
+                    _dataPoolFactory.Add(savedCheat.GameId, value.Append(savedCheat));
+                else
+                {
+                    var item = value.FirstOrDefault(cheat => cheat.Id == saveCheatViewModel.Id);
+                    if(item != null)
+                        value[value.IndexOf(item)] = savedCheat;
+
+                    _dataPoolFactory.Add(savedCheat.GameId, value);
+                }
+            }
+
             return Ok(savedCheat);
         }
     }

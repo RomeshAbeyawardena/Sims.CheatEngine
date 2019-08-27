@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace Sims.CheatEngine.Domains
 {
@@ -13,6 +16,12 @@ namespace Sims.CheatEngine.Domains
         }
 
         public Uri GetUri(string relativeUrl) => new Uri(BaseUri, relativeUrl);
+
+        public Uri GetUriWithQueryString(string relativeUrl, IDictionary<string, string> queryStringValues)
+        {
+            return new Uri(GetUri(relativeUrl),
+            QueryString.Create(queryStringValues).ToUriComponent());
+        }
 
         public UrlBuilder(Uri baseUri)
             : base(baseUri)
