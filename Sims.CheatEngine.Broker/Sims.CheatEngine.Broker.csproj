@@ -9,6 +9,6 @@
 	  <ProjectReference Include="..\Sims.CheatEngine.Services\Sims.CheatEngine.Services.csproj" />
   </ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="WebToolkit.Contracts" Version="2.4.2" />
+	  <PackageReference Include="WebToolkit.Contracts" Version="2.4.3" />
 	</ItemGroup>
 </Project>

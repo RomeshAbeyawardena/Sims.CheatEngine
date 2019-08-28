@@ -1,49 +1,46 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sims.CheatEngine.Domains;
 using Sims.CheatEngine.Domains.Data;
+using WebToolkit.Common;
 using WebToolkit.Common.Builders;
+using WebToolkit.Contracts;
+using WebToolkit.Shared;
 
 namespace Sims.CheatEngine.App
 {
     public partial class MainForm : Form
     {
         private readonly DataAccess _dataAccess = new DataAccess("http://localhost:5000/api/");
+        private readonly IAsyncMessageQueue _requestMessageQueue = AsyncMessageQueue.CreateMessageQueue(500);
 
         private void MainForm_Load(object sender, System.EventArgs e)
         {
             Thread.Sleep(1000);
-            backgroundWorker.DoWork += BackgroundWorker_DoWork;
-            backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
-            backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
-
-            backgroundWorker.WorkerSupportsCancellation = true;
             GetCheats(2, string.Empty);
+            _requestMessageQueue.BeginProcessingQueue();
         }
 
         private void GetCheats(int gameId, string query)
         {
-            
-            if(backgroundWorker.IsBusy)
-                backgroundWorker.CancelAsync();
-            
-            backgroundWorker.RunWorkerAsync(DictionaryBuilder.CreateBuilder<string, string>()
-                .Add("GameId", gameId.ToString())
-                .Add("q", query)
-                .ToDictionary());
+            var parameters = DictionaryBuilder.CreateBuilder<string, string>()
+                .Add("gameId", gameId.ToString());
+
+            if(!string.IsNullOrWhiteSpace(query))
+                parameters.Add("q", query);
+
+            _requestMessageQueue.Enqueue(new AsyncMessage(parameters.ToDictionary(), 
+                DoWork, WorkCompleted));
+;
         }
 
-        private void BackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        private void WorkCompleted(object result)
         {
-            //throw new System.NotImplementedException();
-        }
-
-        private void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            listView1.Items.Clear();
-
-            foreach (var game in (IEnumerable<Cheat>) e.Result)
+            var items = new List<ListViewItem>();
+            foreach (var game in (IEnumerable<Cheat>) result)
             {
                 var primaryListViewItem = new ListViewItem
                 {
@@ -52,18 +49,71 @@ namespace Sims.CheatEngine.App
                 };
                 primaryListViewItem.SubItems.Add(game.Name);
                 primaryListViewItem.SubItems.Add(game.Description);
-                listView1.Items.Add(primaryListViewItem);
+                items.Add(primaryListViewItem);
+            }
+
+            Clear();
+            AddRange(items.ToArray());
+        }
+
+        private void Clear()
+        {
+            if (listView1.InvokeRequired)
+            {
+                var clearCallBack = new ClearCallback(Clear);
+                Invoke(clearCallBack);
+            }
+            else
+            {
+                listView1.Items.Clear();
             }
         }
 
-        private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void AddRange(ListViewItem[] items)
         {
-            e.Result = _dataAccess.RequestAsArray<Cheat>("Game/GetCheats", (IDictionary<string, string>) e.Argument);
+            if (listView1.InvokeRequired)
+            {
+                var addRangeCallback = new AddRangeCallback(AddRange);
+                Invoke(addRangeCallback, new object[] { items });
+            }
+            else
+            {
+                listView1.Items.AddRange(items);
+            }
+        }
+
+        private void SetTitle(string title)
+        {
+            if (titleBarControl1.InvokeRequired)
+            {
+                var titleCallback = new SetTitleDelegate(SetTitle);
+                Invoke(titleCallback, title);
+            }
+            else
+            {
+                titleBarControl1.Text = title;
+            }
+        }
+
+        private delegate void ClearCallback();
+        private delegate void AddRangeCallback(ListViewItem[] items);
+        private delegate void SetTitleDelegate(string title);
+
+        private async Task<object> DoWork(object argument)
+        {
+            return await Task.FromResult(_dataAccess
+                .RequestAsArray<Cheat>("Game/GetCheats", (IDictionary<string, string>) argument));
         }
 
         private void TextBox1_TextChanged(object sender, System.EventArgs e)
         {
-            GetCheats(2, textBox1.Text);
+            if (textBox1.Text.Length == 0 || textBox1.Text.Length > 3)
+                GetCheats(2, textBox1.Text);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _requestMessageQueue.Dispose();
         }
     }
 }
